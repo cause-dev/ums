@@ -1,0 +1,48 @@
+{
+	"file_scan_exclusions": [
+		"**/__pycache__",
+		"**/.pytest_cache",
+		"**/.ruff_cache",
+		"**/.mypy_cache",
+		"..."
+	],
+	"languages": {
+		"Python": {
+			"tab_size": 4,
+			"hard_tabs": false,
+			"language_servers": ["ty", "ruff", "!basedpyright"],
+			"formatter": {
+				"language_server": {
+					"name": "ruff"
+				}
+			},
+			"code_actions_on_format": {
+				"source.fixAll.ruff": true,
+				"source.organizeImports.ruff": true
+			}
+		},
+		"Django": {
+			"tab_size": 4,
+			"formatter": {
+				"external": {
+					"command": "djangofmt",
+					"arguments": ["--stdin-filename", "{buffer_path}"]
+				}
+			}
+		}
+	},
+	"lsp": {
+		"ty": {
+			"binary": {
+				"path": "/app/.venv/bin/ty",
+				"arguments": ["server"]
+			}
+		},
+		"ruff": {
+			"binary": {
+				"path": "/app/.venv/bin/ruff",
+				"arguments": ["server"]
+			}
+		}
+	}
+}
