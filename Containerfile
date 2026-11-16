@@ -32,3 +32,9 @@ COPY pyproject.toml uv.lock ./
 
 RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --locked --all-groups --no-install-project
+
+EXPOSE 8000
+
+ENTRYPOINT []
+
+CMD ["uv", "run", "python", "temp_dj_project/manage.py", "runserver", "0.0.0.0:8000"]

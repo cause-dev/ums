@@ -31,7 +31,6 @@ services:
       - uv_venv:/app/.venv
       - zed_server:/root/.zed_server
       - zed_data:/root/.local/share/zed
-    entrypoint: ["sleep", "infinity"]
     depends_on:
       db:
         condition: service_healthy
