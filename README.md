@@ -35,3 +35,13 @@ Follow the official [documentation](https://docs.allauth.org/en/latest/installat
   admin.autodiscover()
   admin.site.login = secure_admin_login(admin.site.login)
   ```
+
+
+## HTMX
+`django_htmx` is a library that adds HTMX support to Django. You can follow the official [docs](https://django-htmx.readthedocs.io/en/latest/installation.html) to set it up.
+1. Install `django_htmx` using uv:
+  ```
+  uv add django_htmx
+  ```
+2. Add `django_htmx` to `INSTALLED_APPS` in `settings.py`.
+3. Add `django_htmx.middleware.HtmxMiddleware` to `MIDDLEWARE` in `settings.py`.
