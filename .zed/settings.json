@@ -23,25 +23,32 @@
 		},
 		"Django": {
 			"tab_size": 4,
+			"language_servers": ["djls", "!django-template-lsp", "..."],
 			"formatter": {
 				"external": {
-					"command": "djangofmt",
-					"arguments": ["--stdin-filename", "{buffer_path}"]
+					"command": "uv",
+					"arguments": [
+						"run",
+						"--no-sync",
+						"djangofmt",
+						"--stdin-filename",
+						"{buffer_path}"
+					]
 				}
 			}
 		}
 	},
 	"lsp": {
-		"ty": {
-			"binary": {
-				"path": "/app/.venv/bin/ty",
-				"arguments": ["server"]
-			}
-		},
 		"ruff": {
 			"binary": {
-				"path": "/app/.venv/bin/ruff",
-				"arguments": ["server"]
+				"path": "uv",
+				"arguments": ["run", "--no-sync", "ruff", "server"]
+			}
+		},
+		"ty": {
+			"binary": {
+				"path": "uv",
+				"arguments": ["run", "--no-sync", "ty", "server"]
 			}
 		}
 	}

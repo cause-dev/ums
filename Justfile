@@ -1,71 +1,77 @@
 set dotenv-load
 
+manage := "temp_dj_project/manage.py"
+compose := "podman compose -f compose.yaml"
+
 default:
     @just --list
 
-_compose *args:
-    podman compose -f .devcontainer/compose.yaml {{ args }}
-
 [group("lifecycle")]
 up *args:
-    @just _compose up {{ args }}
+    @{{ compose }} up -d {{ args }}
 
 [group("lifecycle")]
 down *args:
-    @just _compose down {{ args }}
-
-[group("lifecycle")]
-start *args:
-    @just _compose start {{ args }}
-
-[group("lifecycle")]
-stop *args:
-    @just _compose stop {{ args }}
-
-[group("lifecycle")]
-restart *args:
-    @just _compose restart {{ args }}
-
-[group("lifecycle")]
-build *args:
-    @just _compose build --no-cache {{ args }}
+    @{{ compose }} down {{ args }}
 
 [group("lifecycle")]
 ps:
-    @just _compose ps
+    @{{ compose }} ps
+
+[group("lifecycle")]
+logs *args:
+    @{{ compose }} logs -f {{ args }}
+
+[group("lifecycle")]
+setup:
+    uv sync --locked --all-groups
+    @just up
+    @for i in 1 2 3 4 5; do uv run python {{ manage }} migrate && break || sleep 2; done
+
+[group("lifecycle")]
+dev *args:
+    uv run python {{ manage }} runserver 127.0.0.1:8000 {{ args }}
 
 [group("database")]
 makemigrations *args:
-    @just _compose exec backend uv run python temp_dj_project/manage.py makemigrations {{ args }}
+    uv run python {{ manage }} makemigrations {{ args }}
 
 [group("database")]
 migrate *args:
-    @just _compose exec backend uv run python temp_dj_project/manage.py migrate {{ args }}
+    uv run python {{ manage }} migrate {{ args }}
 
 [group("database")]
 showmigrations:
-    @just _compose exec backend uv run python temp_dj_project/manage.py showmigrations
+    uv run python {{ manage }} showmigrations
+
+[group("database")]
+psql:
+    {{ compose }} exec db psql -U "$POSTGRES_USER" -d "$POSTGRES_DB"
 
 [group("quality")]
 lint:
-    @just _compose exec backend uv run ruff check ./src
-    @just _compose exec backend uv run ty check ./src
-    @just _compose exec backend uv run djangofmt check ./src
+    uv run ruff check ./src
+    uv run ty check ./src
+    uv run djangofmt check ./src
 
 [group("quality")]
 format:
-    @just _compose exec backend uv run ruff format ./src
-    @just _compose exec backend uv run djangofmt ./src
+    uv run ruff format ./src
+    uv run djangofmt ./src
 
 [group("quality")]
 fix:
-    @just _compose exec backend uv run ruff check --fix ./src
-    @just _compose exec backend uv run djangofmt check --fix ./src
+    uv run ruff check --fix ./src
+    uv run djangofmt check --fix ./src
 
 [group("shell")]
-shell-backend:
-    @just _compose exec backend bash
+shell:
+    uv run python {{ manage }} shell
 
 [group("shell")]
-logs *args:
-    @just _compose logs -f {{ args }}
+doctor:
+    @uv --version; uv run python --version; podman --version
+
+[group("debug")]
+debug:
+    uv run python -m debugpy --listen 5678 --wait-for-client {{ manage }} runserver 127.0.0.1:8000 --noreload
