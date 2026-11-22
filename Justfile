@@ -1,32 +1,14 @@
 set dotenv-load
 
 manage := "temp_dj_project/manage.py"
-compose := "podman compose -f compose.yaml"
 
 default:
     @just --list
 
 [group("lifecycle")]
-up *args:
-    @{{ compose }} up -d {{ args }}
-
-[group("lifecycle")]
-down *args:
-    @{{ compose }} down {{ args }}
-
-[group("lifecycle")]
-ps:
-    @{{ compose }} ps
-
-[group("lifecycle")]
-logs *args:
-    @{{ compose }} logs -f {{ args }}
-
-[group("lifecycle")]
 setup:
     uv sync --locked --all-groups
-    @just up
-    @for i in 1 2 3 4 5; do uv run python {{ manage }} migrate && break || sleep 2; done
+    uv run python {{ manage }} migrate
 
 [group("lifecycle")]
 dev *args:
@@ -43,10 +25,6 @@ migrate *args:
 [group("database")]
 showmigrations:
     uv run python {{ manage }} showmigrations
-
-[group("database")]
-psql:
-    {{ compose }} exec db psql -U "$POSTGRES_USER" -d "$POSTGRES_DB"
 
 [group("quality")]
 lint:

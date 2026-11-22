@@ -21,6 +21,7 @@ build-backend = "uv_build"
 
 [dependency-groups]
 dev = [
+    "debugpy>=1.8.22",
     "django-stubs-ext>=6.1.2",
     "django-types>=0.24.0",
     "djangofmt>=1.1.0",
