@@ -1,0 +1,40 @@
+<header class="um:sticky um:top-0 um:z-40 um:w-full um:bg-accent um:border-b um:border-zinc-200">
+    <div class="um:ums-navbar um:bg-base-100 um:shadow-sm">
+        <div class="um:ums-navbar-start">
+            <div class="um:ums-dropdown">
+                <div tabindex="0" role="button" class="um:ums-btn um:ums-btn-ghost um:lg:hidden">
+                    <svg
+                        aria-label="Menu"
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="um:h-5 um:w-5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M4 6h16M4 12h8m-8 6h16"
+                        />
+                    </svg>
+                </div>
+                <ul
+                    tabindex="-1"
+                    class="um:ums-menu um:ums-menu-sm um:ums-dropdown-content um:bg-base-100 um:rounded-box um:z-1 um:mt-3 um:w-52 um:p-2 um:ums-shadow"
+                >
+                    {% include "components/nav-items.html" %}
+                </ul>
+            </div>
+            <a class="um:ums-btn um:ums-btn-ghost um:text-xl">Django UMS</a>
+        </div>
+        <div class="um:ums-navbar-center um:hidden um:lg:flex">
+            <ul class="um:ums-menu um:ums-menu-horizontal um-px-1">
+                {% include "components/nav-items.html" %}
+            </ul>
+        </div>
+        <div class="um:ums-navbar-end">
+            <a class="um:ums-btn">Button</a>
+        </div>
+    </div>
+</header>

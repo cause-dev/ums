@@ -3,4 +3,59 @@
 @import "tailwindcss/theme.css" layer(theme) prefix(um);
 @import "tailwindcss/utilities.css" layer(utilities) prefix(um) source(none);
 
+/* daisyUI */
+@plugin "daisyui" {
+    themes:
+        light --default,
+        dark --prefersdark;
+
+    root: ".um-theme";
+
+    prefix: "ums-";
+
+    exclude: rootcolor, scrollbar, rootscrolllock, rootscrollgutter;
+
+    logs: false;
+}
+
+@plugin "daisyui/theme" {
+    name: "dark";
+    prefersdark: true;
+    color-scheme: dark;
+
+    --color-base-100: #05090c;
+    --color-base-200: #0d141b;
+    --color-base-300: #17232e;
+    --color-base-content: #e0e7ef;
+
+    --color-primary: #9dbadb;
+    --color-primary-content: #05090c;
+
+    --color-secondary: #274f7d;
+    --color-secondary-content: #e0e7ef;
+
+    --color-accent: #4586cf;
+    --color-accent-content: #05090c;
+}
+
+@layer base {
+    .um-theme,
+    .um-theme *,
+    .um-theme::before,
+    .um-theme::after,
+    .um-theme *::before,
+    .um-theme *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    .um-theme {
+        min-height: 100%;
+        font-size: 1rem;
+        font-family:
+            "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+    }
+}
+
 @source "../src/accounts/templates";
