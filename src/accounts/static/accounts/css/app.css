@@ -1,0 +1,12 @@
+/*! tailwindcss v4.3.5 | MIT License | https://tailwindcss.com */
+@layer theme, base, components, utilities;
+@layer theme {
+  :root, :host {
+    --um-color-blue-600: oklch(54.6% 0.245 262.881);
+  }
+}
+@layer utilities {
+  .um\:bg-blue-600 {
+    background-color: var(--um-color-blue-600);
+  }
+}

@@ -1,14 +1,26 @@
 {% load django_htmx %}
+{% load static %}
 
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Hello World</title>
-        {% htmx_script %}
+        <link rel="stylesheet" href='{% static "accounts/css/app.css" %}'>
+        <title>{% block title %} {{ section.title }} {% htmx_script %} {% endblock title %}</title>
     </head>
-    <body hx-headers='{"x-csrftoken": "{{ csrf_token }}"}'>
-        <h1>Hello</h1>
+    <body hx-headers='{"x-csrftoken": "{{ csrf_token }}"}' class="um:bg-blue-600">
+        <header>
+            <nav aria-label="Main Navigation">
+                <ul>
+                    <li><a href="#">Account</a></li>
+                    <li><a href="#">Sign in</a></li>
+                    <li><a href="#">Sign up</a></li>
+                    <li><a href="#">Logout</a></li>
+                </ul>
+            </nav>
+        </header>
+        {% block content %}
+        {% endblock content %}
     </body>
 </html>

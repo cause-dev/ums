@@ -34,3 +34,6 @@ line-length = 120
 indent-width = 4
 profile = "django"
 html-void-self-closing = "never"
+
+[tool.djls]
+django_settings_module = "temp_dj_project.config.settings"

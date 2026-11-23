@@ -1,0 +1,11 @@
+{
+	"scripts": {
+		"css:dev": "bunx @tailwindcss/cli -i ./assets/input.css -o ./src/accounts/static/accounts/css/app.css --watch",
+		"css:build": "bunx @tailwindcss/cli -i ./assets/input.css -o ./src/accounts/static/accounts/css/app.css --minify"
+	},
+	"dependencies": {},
+	"devDependencies": {
+		"@tailwindcss/cli": "^4.3.5",
+		"tailwindcss": "^4.3.5"
+	}
+}

@@ -7,11 +7,16 @@ default:
 
 [group("lifecycle")]
 setup:
+    bun install
     uv sync --locked --all-groups
     uv run python {{ manage }} migrate
 
 [group("lifecycle")]
-dev *args:
+[parallel]
+dev *args: css-dev (django-dev args)
+css-dev:
+    bun run css:dev
+django-dev *args:
     uv run python {{ manage }} runserver 127.0.0.1:8000 {{ args }}
 
 [group("database")]
