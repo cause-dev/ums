@@ -1,0 +1,33 @@
+{% extends "account/base.html" %}
+
+{% block content %}
+    {% with field_name="display_name" field_label="Name" field_value=object.display_name %}
+        {% partial field-display %}
+    {% endwith %}
+
+    {% with field_name="username" field_label="Username" field_value=object.username %}
+        {% partial field-display %}
+    {% endwith %}
+
+    {% with field_name="email" field_label="Email" field_value=object.email %}
+        {% partial field-display %}
+    {% endwith %}
+
+    {% partialdef field-display %}
+        <div hx-target="this" hx-swap="outerHTML">
+            <strong>{{ field_label }}:</strong>
+            <span>{{ field_value }}</span>
+            <button hx-get="{% url 'user-field-edit' object.pk field_name %}">Edit</button>
+        </div>
+    {% endpartialdef %}
+
+    {% partialdef field-form %}
+        <form hx-post="{% url 'user-field-edit' object.pk field_name %}" hx-target="this" hx-swap="outerHTML">
+            {% csrf_token %}
+            <label><strong>{{ field_label }}:</strong></label>
+            <input type="text" name="value" value="{{ field_value }}" autofocus>
+            <button type="submit">Save</button>
+            <button hx-get="{% url 'user-field' object.pk field_name %}">Cancel</button>
+        </form>
+    {% endpartialdef %}
+{% endblock content %}
