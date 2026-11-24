@@ -5,12 +5,8 @@
   :root, :host {
     --um-color-zinc-200: oklch(92% 0.004 286.32);
     --um-spacing: 0.25rem;
-    --um-container-7xl: 80rem;
     --um-text-xl: 1.25rem;
     --um-text-xl--line-height: calc(1.75 / 1.25);
-    --um-text-2xl: 1.5rem;
-    --um-text-2xl--line-height: calc(2 / 1.5);
-    --um-font-weight-medium: 500;
   }
 }
 @layer utilities {
@@ -734,9 +730,6 @@
   .um\:z-40 {
     z-index: 40;
   }
-  .um\:mx-auto {
-    margin-inline: auto;
-  }
   .um\:mt-3 {
     margin-top: calc(var(--um-spacing) * 3);
   }
@@ -794,9 +787,6 @@
       }
     }
   }
-  .um\:flex {
-    display: flex;
-  }
   .um\:hidden {
     display: none;
   }
@@ -805,9 +795,6 @@
   }
   .um\:h-6 {
     height: calc(var(--um-spacing) * 6);
-  }
-  .um\:h-16 {
-    height: calc(var(--um-spacing) * 16);
   }
   .um\:h-\[1em\] {
     height: 1em;
@@ -818,29 +805,14 @@
   .um\:w-6 {
     width: calc(var(--um-spacing) * 6);
   }
-  .um\:w-40 {
-    width: calc(var(--um-spacing) * 40);
-  }
   .um\:w-52 {
     width: calc(var(--um-spacing) * 52);
   }
   .um\:w-full {
     width: 100%;
   }
-  .um\:max-w-7xl {
-    max-width: var(--um-container-7xl);
-  }
   .um\:shrink-0 {
     flex-shrink: 0;
-  }
-  .um\:items-center {
-    align-items: center;
-  }
-  .um\:justify-between {
-    justify-content: space-between;
-  }
-  .um\:gap-3 {
-    gap: calc(var(--um-spacing) * 3);
   }
   @layer daisyui.l1.l2 {
     .um\:ums-menu-sm {
@@ -863,9 +835,6 @@
   .um\:rounded-box {
     border-radius: var(--radius-box);
   }
-  .um\:ums-rounded-box {
-    border-radius: var(--radius-box);
-  }
   .um\:border-b {
     border-bottom-style: var(--tw-border-style);
     border-bottom-width: 1px;
@@ -881,9 +850,6 @@
   }
   .um\:bg-base-200 {
     background-color: var(--color-base-200);
-  }
-  .um\:bg-base-300 {
-    background-color: var(--color-base-300);
   }
   @layer daisyui.l1.l2.l3 {
     .um\:ums-btn-ghost {
@@ -901,20 +867,9 @@
   .um\:p-2 {
     padding: calc(var(--um-spacing) * 2);
   }
-  .um\:px-4 {
-    padding-inline: calc(var(--um-spacing) * 4);
-  }
-  .um\:text-2xl {
-    font-size: var(--um-text-2xl);
-    line-height: var(--tw-leading, var(--um-text-2xl--line-height));
-  }
   .um\:text-xl {
     font-size: var(--um-text-xl);
     line-height: var(--tw-leading, var(--um-text-xl--line-height));
-  }
-  .um\:font-medium {
-    --tw-font-weight: var(--um-font-weight-medium);
-    font-weight: var(--um-font-weight-medium);
   }
   @layer daisyui.l1.l2 {
     .um\:ums-alert-warning {
@@ -932,18 +887,9 @@
   .um\:opacity-50 {
     opacity: 50%;
   }
-  .um\:shadow {
-    --tw-shadow: 0 1px 3px 0 var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 1px 2px -1px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
-    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
-  }
   .um\:shadow-sm {
     --tw-shadow: 0 1px 3px 0 var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 1px 2px -1px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
     box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
-  }
-  @media (width >= 40rem) {
-    .um\:sm\:px-6 {
-      padding-inline: calc(var(--um-spacing) * 6);
-    }
   }
   @media (width >= 64rem) {
     .um\:lg\:flex {
@@ -951,9 +897,6 @@
     }
     .um\:lg\:hidden {
       display: none;
-    }
-    .um\:lg\:px-8 {
-      padding-inline: calc(var(--um-spacing) * 8);
     }
   }
 }
@@ -1268,10 +1211,6 @@
   inherits: false;
   initial-value: solid;
 }
-@property --tw-font-weight {
-  syntax: "*";
-  inherits: false;
-}
 @property --tw-shadow {
   syntax: "*";
   inherits: false;
@@ -1341,7 +1280,6 @@
   @supports ((-webkit-hyphens: none) and (not (margin-trim: block))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
     *, ::before, ::after, ::backdrop {
       --tw-border-style: solid;
-      --tw-font-weight: initial;
       --tw-shadow: 0 0 #0000;
       --tw-shadow-color: initial;
       --tw-shadow-alpha: 100%;

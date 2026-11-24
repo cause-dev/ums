@@ -1,7 +1,7 @@
 from typing import ClassVar
 
 from django.contrib.auth import get_user_model
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models import Model
 from django.http import Http404
 from django.shortcuts import render
@@ -24,7 +24,78 @@ class ProfileView(LoginRequiredMixin, DetailView):
         return self.request.user
 
 
-class UserFieldInlineView(LoginRequiredMixin, SingleObjectMixin, View):
+class UserFieldView(LoginRequiredMixin, DetailView):
+    """
+    Get the htmx-get request with object pk and field_name,
+    make sure user is authenticated to view the field,
+    make sure user can only view it's own field,
+    send response with field_name, field_value and object.
+    """
+
+    model = User
+    template_name = "account/profile.html"
+
+    object: Model
+
+    def get_queryset(self):
+        return super().get_queryset().filter(pk=self.request.user.pk)
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        field_name = self.kwargs.get("field_name")
+        context["field_name"] = field_name
+        context["field_value"] = getattr(self.object, field_name)
+        return context
+
+    def get_template_names(self):
+        return (f"{self.template_name}#field-display",)
+
+
+class UserFieldInputView(LoginRequiredMixin, DetailView):
+    """
+    Get htmx-get request, validate the user login,
+    check if the required fields belongs to the user,
+    make sure user is not allowed to change other user's field,
+    make sure the required image is allowed to be changed,
+    then send the response with the partial input field with that field_name and field_value.
+    """
+
+    model = User
+    template_name = "account/profile.html"
+
+    object: Model
+
+    ALLOWED_FIELDS: ClassVar[set[str]] = {
+        "first_name",
+        "last_name",
+        "display_name",
+        "username",
+        "email",
+    }
+
+    def get_queryset(self):
+        return super().get_queryset().filter(pk=self.request.user.pk)
+
+    def get_template_names(self):
+        return (f"{self.template_name}#field-form",)
+
+    def get_field_name(self):
+        field_name = self.kwargs.get("field_name")
+        if field_name is None or field_name not in self.ALLOWED_FIELDS:
+            raise Http404("Field cannot be edited.")
+        return field_name
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        field_name = self.get_field_name()
+        context["field_name"] = field_name
+        context["field_value"] = getattr(self.object, field_name)
+        return context
+
+
+class UserFieldInlineView(
+    LoginRequiredMixin, UserPassesTestMixin, SingleObjectMixin, View
+):
     model = User
     template_name = "account/profile.html"
     mode = "display"
@@ -32,11 +103,7 @@ class UserFieldInlineView(LoginRequiredMixin, SingleObjectMixin, View):
     object: Model | None
     field_name: str | None
 
-    editable_fields: ClassVar[dict[str, str]] = {
-        "display_name": "Display Name",
-        "username": "Username",
-        "email": "Email",
-    }
+    editable_fields: ClassVar[set[str]] = {"display_name", "username", "email"}
 
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
@@ -56,9 +123,7 @@ class UserFieldInlineView(LoginRequiredMixin, SingleObjectMixin, View):
             raise ValueError("Field name is required.")
 
         return {
-            "object": self.object,
             "field_name": self.field_name,
-            "field_label": self.editable_fields[self.field_name],
             "field_value": getattr(self.object, self.field_name),
         }
 
