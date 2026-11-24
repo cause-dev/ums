@@ -93,6 +93,55 @@ class UserFieldInputView(LoginRequiredMixin, DetailView):
         return context
 
 
+class UserFieldUpdateView(LoginRequiredMixin, SingleObjectMixin, View):
+    """
+    Get htmx post request with field_name, value and object,
+    make sure user is authenticated and object belongs to the user,
+    make sure field is allowed to change,
+    update the field and save to database,
+    send a response back with a partial template to the user.
+    """
+
+    model = User
+    template_name = "account/profile.html"
+
+    ALLOWED_FIELDS: ClassVar[set[str]] = {
+        "first_name",
+        "last_name",
+        "display_name",
+        "username",
+        "email",
+    }
+
+    object: Model
+
+    def get_queryset(self):
+        return super().get_queryset().filter(pk=self.request.user.pk)
+
+    def get_field_name(self):
+        field_name = self.kwargs.get("field_name")
+        if field_name is None or field_name not in self.ALLOWED_FIELDS:
+            raise Http404("Field cannot be edited.")
+        return field_name
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        field_name = self.get_field_name()
+        context["field_name"] = field_name
+        context["field_value"] = getattr(self.object, field_name)
+        return context
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        new_value = request.POST.get("value", "").strip()
+        field_name = self.get_field_name()
+        setattr(self.object, field_name, new_value)
+        self.object.save(update_fields=[field_name])
+        return render(
+            self.request, f"{self.template_name}#field-display", self.get_context_data()
+        )
+
+
 class UserFieldInlineView(
     LoginRequiredMixin, UserPassesTestMixin, SingleObjectMixin, View
 ):

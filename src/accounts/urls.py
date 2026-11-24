@@ -4,6 +4,7 @@ from .views import (
     ProfileView,
     UserFieldInlineView,
     UserFieldInputView,
+    UserFieldUpdateView,
     UserFieldView,
     test_htmx,
 )
@@ -23,8 +24,8 @@ urlpatterns = [
     ),
     path(
         "profile/<int:pk>/field/<str:field_name>/edit/",
-        UserFieldInlineView.as_view(mode="edit"),
-        name="user-field-edit",
+        UserFieldUpdateView.as_view(),
+        name="user_update_field",
     ),
     path(
         "profile/<int:pk>/field/<str:field_name>/",

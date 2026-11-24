@@ -22,7 +22,7 @@
     {% endpartialdef field-display %}
 
     {% partialdef field-form %}
-        <form hx-post="{% url 'user-field-edit' object.pk field_name %}" hx-target="this" hx-swap="outerHTML">
+        <form hx-post="{% url 'user_update_field' object.pk field_name %}" hx-target="this" hx-swap="outerHTML">
             {% csrf_token %}
             <label class="um:ums-input um:ums-validator">
                 <svg class="um:h-[1em] um:opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -39,6 +39,7 @@
                 </svg>
                 <input
                     type="text"
+                    name="value"
                     required
                     value="{{ field_value }}"
                     pattern="[A-Za-z][A-Za-z0-9\-]*"
