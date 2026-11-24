@@ -8,7 +8,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href='{% static "accounts/css/app.css" %}'>
         {% htmx_script %}
-        <title>{% block title %} {{ section.title }} {% endblock title %}</title>
+        <title>{% block title %} {{ section.title }} {% endblock %}</title>
     </head>
     <body hx-headers='{"x-csrftoken": "{{ csrf_token }}"}' class="um:bg-base-200">
         {% include "components/header.html" %}
@@ -29,6 +29,9 @@
                     />
                 </svg>
                 <span>Warning: Invalid email address!</span>
+                <button class="um:ums-btn um:ums-btn-primary">
+                    Primary Button
+                </button>
             </div>
         {% endblock message %}
 

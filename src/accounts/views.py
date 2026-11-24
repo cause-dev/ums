@@ -6,8 +6,10 @@ from django.db.models import Model
 from django.http import Http404
 from django.shortcuts import render
 from django.views import View
-from django.views.generic import DetailView
+from django.views.generic import DetailView, ListView
 from django.views.generic.detail import SingleObjectMixin
+
+from accounts.selectors import get_user_list
 
 User = get_user_model()
 
@@ -199,3 +201,15 @@ class UserFieldInlineView(
         self.object.save(update_fields=[self.field_name])
 
         return self.render_partial("field-display")
+
+
+class UserListView(LoginRequiredMixin, ListView):
+    model = User
+    template_name = "account/user_list.html"
+    context_object_name = "users"
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        user = self.request.user
+        data = get_user_list(qs, user)
+        return data

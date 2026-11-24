@@ -1,0 +1,44 @@
+{% extends "account/base.html" %}
+{% block title %}
+    Users
+{% endblock title %}
+{% block content %}
+    <h1>Users</h1>
+    <h3>{{ users }}</h3>
+    <div class="um:rounded-box um:border-base-content/5 um:bg-base-100 um:overflow-x-auto um:border">
+        <table class="um:ums-table">
+            <!-- head -->
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Is Active</th>
+                    <th>Last Login</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- row 1 -->
+                {% for user in users %}
+                    {% partialdef user_row inline %}
+                        <tr>
+                            <th>{{ user.id }}</th>
+                            <td>{{ user.username }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>
+                                <input
+                                    type="checkbox"
+                                    {% if user.is_active %}checked{% endif %}
+                                    class="um:ums-toggle um:ums-toggle-accent"
+                                >
+                            </td>
+                            <td>{{ user.last_login }}</td>
+                            <td>{{ user.actions }}</td>
+                        </tr>
+                    {% endpartialdef user_row %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock content %}

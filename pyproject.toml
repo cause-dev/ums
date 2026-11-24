@@ -42,5 +42,13 @@ fix = true
 [tool.djangofmt.lint.unsorted-tailwind-classes]
 prefix = "um:"
 
+[tool.ruff]
+extend-exclude = ["**/migrations/*.py"]
+
 [tool.djls]
 django_settings_module = "temp_dj_project.config.settings"
+venv_path = ".venv"
+pythonpath = ["src"]
+
+[tool.djls.diagnostics.severity]
+S108 = "off"

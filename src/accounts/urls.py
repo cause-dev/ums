@@ -6,6 +6,7 @@ from .views import (
     UserFieldInputView,
     UserFieldUpdateView,
     UserFieldView,
+    UserListView,
     test_htmx,
 )
 
@@ -32,4 +33,5 @@ urlpatterns = [
         UserFieldInlineView.as_view(mode="display"),
         name="user-field",
     ),
+    path("users/", UserListView.as_view(), name="user_list"),
 ]
