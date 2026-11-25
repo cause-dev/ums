@@ -4,7 +4,6 @@
 {% endblock title %}
 {% block content %}
     <h1>Users</h1>
-    <h3>{{ users }}</h3>
     <div class="um:rounded-box um:border-base-content/5 um:bg-base-100 um:overflow-x-auto um:border">
         <table class="um:ums-table">
             <!-- head -->
@@ -21,22 +20,7 @@
             <tbody>
                 <!-- row 1 -->
                 {% for user in users %}
-                    {% partialdef user_row inline %}
-                        <tr>
-                            <th>{{ user.id }}</th>
-                            <td>{{ user.username }}</td>
-                            <td>{{ user.email }}</td>
-                            <td>
-                                <input
-                                    type="checkbox"
-                                    {% if user.is_active %}checked{% endif %}
-                                    class="um:ums-toggle um:ums-toggle-accent"
-                                >
-                            </td>
-                            <td>{{ user.last_login }}</td>
-                            <td>{{ user.actions }}</td>
-                        </tr>
-                    {% endpartialdef user_row %}
+                    {% include "account/partials/user_partials.html#user_row" with user=user %}
                 {% endfor %}
             </tbody>
         </table>

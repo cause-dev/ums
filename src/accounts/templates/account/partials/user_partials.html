@@ -1,0 +1,21 @@
+{% partialdef user_row %}
+    <tr>
+        <th>{{ user.id }}</th>
+        <td>{{ user.username }}</td>
+        <td>{{ user.email }}</td>
+        <td>
+            {% partialdef user_is_active inline %}
+                <input
+                    hx-post="{% url "user_update_field" user.pk "is_active" %}"
+                    hx-target="this"
+                    hx-swap="outerHTML"
+                    type="checkbox"
+                    {% if user.is_active %}checked{% endif %}
+                    class="um:ums-toggle um:ums-toggle-accent"
+                >
+            {% endpartialdef user_is_active %}
+        </td>
+        <td>{{ user.last_login }}</td>
+        <td>{{ user.actions }}</td>
+    </tr>
+{% endpartialdef user_row %}
