@@ -12,10 +12,6 @@ from accounts.models import User
 from accounts.selectors import get_user_list
 
 
-def test_htmx(request):
-    print(request.htmx)
-
-
 class ProfileView(LoginRequiredMixin, DetailView):
     model = User
     template_name = "account/profile.html"

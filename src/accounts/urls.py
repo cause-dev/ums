@@ -6,11 +6,9 @@ from .views import (
     UserFieldUpdateView,
     UserFieldView,
     UserListView,
-    test_htmx,
 )
 
 urlpatterns = [
-    path("test-htmx/", test_htmx, name="test_htmx"),
     path("profile/", ProfileView.as_view(), name="profile"),
     path(
         "profile/<int:pk>/field/<str:field_name>/input/",
