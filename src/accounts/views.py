@@ -107,14 +107,6 @@ class UserFieldUpdateView(LoginRequiredMixin, SingleObjectMixin, View):
     model = User
     template_name = "account/profile.html"
 
-    ALLOWED_FIELDS: ClassVar[set[str]] = {
-        "first_name",
-        "last_name",
-        "display_name",
-        "username",
-        "email",
-    }
-
     object: User
 
     def get_queryset(self):
