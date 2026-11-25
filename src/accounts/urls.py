@@ -2,7 +2,6 @@ from django.urls import path
 
 from .views import (
     ProfileView,
-    UserFieldInlineView,
     UserFieldInputView,
     UserFieldUpdateView,
     UserFieldView,
@@ -27,11 +26,6 @@ urlpatterns = [
         "profile/<int:pk>/field/<str:field_name>/edit/",
         UserFieldUpdateView.as_view(),
         name="user_update_field",
-    ),
-    path(
-        "profile/<int:pk>/field/<str:field_name>/",
-        UserFieldInlineView.as_view(mode="display"),
-        name="user-field",
     ),
     path("users/", UserListView.as_view(), name="user_list"),
 ]
