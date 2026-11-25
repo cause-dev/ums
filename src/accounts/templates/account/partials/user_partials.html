@@ -1,4 +1,4 @@
-{% partialdef user_row %}
+{% partialdef user_row inline %}
     <tr>
         <th>{{ user.id }}</th>
         <td>{{ user.username }}</td>
@@ -8,6 +8,7 @@
                 <input
                     hx-post="{% url "user_update_field" user.pk "is_active" %}"
                     hx-target="this"
+                    name="value"
                     hx-swap="outerHTML"
                     type="checkbox"
                     {% if user.is_active %}checked{% endif %}

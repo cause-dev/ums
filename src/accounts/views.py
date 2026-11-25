@@ -123,6 +123,24 @@ class UserFieldUpdateView(LoginRequiredMixin, SingleObjectMixin, View):
         data = get_user_list(qs, user)
         return data
 
+    def get_partial_template(self):
+        is_active_field = self.kwargs.get("field_name", "") == "is_active"
+
+        partial_template = {
+            "display": f"{self.template_name}#field-display",
+            "edit": f"{self.template_name}#field-form",
+        }
+
+        if is_active_field:
+            partial_template["display"] = (
+                "account/partials/user_partials.html#user_is_active"
+            )
+            partial_template["edit"] = (
+                "account/partials/user_partials.html#user_is_active"
+            )
+
+        return partial_template
+
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         field_name = get_field_name(
@@ -142,20 +160,6 @@ class UserFieldUpdateView(LoginRequiredMixin, SingleObjectMixin, View):
             target=self.object,
         )
 
-        is_active_field = field_name == "is_active"
-
-        edit_partial = (
-            f"{self.template_name}#active-edit"
-            if is_active_field
-            else f"{self.template_name}#field-edit"
-        )
-
-        display_partial = (
-            f"{self.template_name}#user_is_active"
-            if is_active_field
-            else f"{self.template_name}#field-display"
-        )
-
         form_class = modelform_factory(
             self.model,
             fields=[field_name],
@@ -172,13 +176,17 @@ class UserFieldUpdateView(LoginRequiredMixin, SingleObjectMixin, View):
 
             return render(
                 request,
-                edit_partial,
+                self.get_partial_template()["edit"],
                 context,
             )
 
         self.object = form.save(commit=False)
         self.object.save(update_fields=[field_name])
-        return render(self.request, display_partial, self.get_context_data())
+        return render(
+            self.request,
+            self.get_partial_template()["display"],
+            self.get_context_data(),
+        )
 
 
 class UserFieldInlineView(
