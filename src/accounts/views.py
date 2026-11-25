@@ -97,11 +97,8 @@ class UserFieldInputView(LoginRequiredMixin, DetailView):
 
 class UserFieldUpdateView(LoginRequiredMixin, SingleObjectMixin, View):
     """
-    Get htmx post request with field_name, value and object,
-    make sure user is authenticated and object belongs to the user,
-    make sure field is allowed to change,
-    update the field and save to database,
-    send a response back with a partial template to the user.
+    Handle authenticated HTMX requests to update a permitted field
+    on an accessible user and return the corresponding template partial.
     """
 
     model = User
