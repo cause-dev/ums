@@ -1,9 +1,8 @@
-from typing import ClassVar, cast
+from typing import cast
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Model
 from django.forms import modelform_factory
-from django.http import Http404
 from django.shortcuts import render
 from django.views import View
 from django.views.generic import DetailView, ListView
@@ -68,15 +67,7 @@ class UserFieldInputView(LoginRequiredMixin, DetailView):
     model = User
     template_name = "account/profile.html"
 
-    object: Model
-
-    ALLOWED_FIELDS: ClassVar[set[str]] = {
-        "first_name",
-        "last_name",
-        "display_name",
-        "username",
-        "email",
-    }
+    object: User
 
     def get_queryset(self):
         qs = super().get_queryset()
@@ -87,15 +78,13 @@ class UserFieldInputView(LoginRequiredMixin, DetailView):
     def get_template_names(self):
         return (f"{self.template_name}#field-form",)
 
-    def get_field_name(self):
-        field_name = self.kwargs.get("field_name")
-        if field_name is None or field_name not in self.ALLOWED_FIELDS:
-            raise Http404("Field cannot be edited.")
-        return field_name
-
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        field_name = self.get_field_name()
+        field_name = get_field_name(
+            field_name=self.kwargs.get("field_name", ""),
+            user=cast(User, self.request.user),
+            target=self.object,
+        )
         context["field_name"] = field_name
         context["field_value"] = getattr(self.object, field_name)
         return context
