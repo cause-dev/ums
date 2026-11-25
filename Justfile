@@ -47,6 +47,10 @@ fix:
     uv run ruff check --fix ./src
     uv run djangofmt check --fix ./src
 
+[group("quality")]
+test:
+    uv run python {{ manage }} test accounts.tests
+
 [group("shell")]
 shell:
     uv run python {{ manage }} shell

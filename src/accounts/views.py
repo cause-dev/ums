@@ -13,6 +13,8 @@ from accounts.selectors import get_user_list
 
 
 class ProfileView(LoginRequiredMixin, DetailView):
+    """Display the authenticated user's own profile."""
+
     model = User
     template_name = "account/profile.html"
 
@@ -21,12 +23,7 @@ class ProfileView(LoginRequiredMixin, DetailView):
 
 
 class UserFieldView(LoginRequiredMixin, DetailView):
-    """
-    Get the htmx-get request with object pk and field_name,
-    make sure user is authenticated to view the field,
-    make sure user can only view it's own field,
-    send response with field_name, field_value and object.
-    """
+    """Render the display partial for a field on an accessible user."""
 
     model = User
     template_name = "account/profile.html"
@@ -51,13 +48,7 @@ class UserFieldView(LoginRequiredMixin, DetailView):
 
 
 class UserFieldInputView(LoginRequiredMixin, DetailView):
-    """
-    Get htmx-get request, validate the user login,
-    check if the required fields belongs to the user,
-    make sure user is not allowed to change other user's field,
-    make sure the required image is allowed to be changed,
-    then send the response with the partial input field with that field_name and field_value.
-    """
+    """Validate field-level permissions and render the corresponding input partial."""
 
     model = User
     template_name = "account/profile.html"
@@ -86,10 +77,7 @@ class UserFieldInputView(LoginRequiredMixin, DetailView):
 
 
 class UserFieldUpdateView(LoginRequiredMixin, SingleObjectMixin, View):
-    """
-    Handle authenticated HTMX requests to update a permitted field
-    on an accessible user and return the corresponding template partial.
-    """
+    """Handle HTMX field updates, validate submitted values, and return the updated partial."""
 
     model = User
     template_name = "account/profile.html"
@@ -169,6 +157,8 @@ class UserFieldUpdateView(LoginRequiredMixin, SingleObjectMixin, View):
 
 
 class UserListView(LoginRequiredMixin, ListView):
+    """Display the list of users accessible to the authenticated user."""
+
     model = User
     template_name = "account/user_list.html"
     context_object_name = "users"
