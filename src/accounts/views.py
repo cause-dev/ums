@@ -1,7 +1,6 @@
 from typing import cast
 
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Model
 from django.forms import modelform_factory
 from django.shortcuts import render
 from django.views import View
@@ -36,7 +35,7 @@ class UserFieldView(LoginRequiredMixin, DetailView):
     model = User
     template_name = "account/profile.html"
 
-    object: Model
+    object: User
 
     def get_queryset(self):
         qs = super().get_queryset()
