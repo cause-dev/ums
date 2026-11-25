@@ -40,7 +40,10 @@ class UserFieldView(LoginRequiredMixin, DetailView):
     object: Model
 
     def get_queryset(self):
-        return super().get_queryset().filter(pk=self.request.user.pk)
+        qs = super().get_queryset()
+        user = self.request.user
+        data = get_user_list(queryset=qs, user=user)
+        return data
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
@@ -76,7 +79,10 @@ class UserFieldInputView(LoginRequiredMixin, DetailView):
     }
 
     def get_queryset(self):
-        return super().get_queryset().filter(pk=self.request.user.pk)
+        qs = super().get_queryset()
+        user = self.request.user
+        data = get_user_list(queryset=qs, user=user)
+        return data
 
     def get_template_names(self):
         return (f"{self.template_name}#field-form",)
