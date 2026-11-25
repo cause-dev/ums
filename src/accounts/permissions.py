@@ -1,5 +1,6 @@
 import functools
 
+from django.contrib.auth.models import AnonymousUser
 from django.contrib.auth.views import redirect_to_login
 from django.core.exceptions import PermissionDenied
 
@@ -7,7 +8,7 @@ from accounts.constants import DEFAULT_ROLE_NAMES
 from accounts.models import User
 
 
-def has_role(user: User, role: str) -> bool:
+def has_role(user: User | AnonymousUser, role: str) -> bool:
     if not user.is_authenticated:
         return False
 
