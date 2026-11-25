@@ -1,0 +1,108 @@
+[env]
+_.file = ".env"
+
+[vars]
+manage = "temp_dj_project/manage.py"
+host = "127.0.0.1"
+port = "8000"
+
+# ---------- lifecycle ----------
+
+[tasks."deps:js"]
+description = "Install JS dependencies"
+run = "bun install"
+
+[tasks."deps:py"]
+description = "Install Python dependencies"
+run = "uv sync --locked --all-groups"
+
+[tasks.setup]
+description = "Install everything and run migrations"
+depends = ["deps:js", "deps:py"]   # run in parallel
+run = "uv run python {{vars.manage}} migrate"
+
+[tasks."dev:css"]
+description = "Run the CSS watcher"
+run = "bun run css:dev"
+
+[tasks."dev:django"]
+description = "Run the Django dev server"
+raw_args = true
+run = "uv run python {{vars.manage}} runserver {{vars.host}}:{{vars.port}}"
+
+[tasks.dev]
+description = "Run CSS watcher and Django server together"
+alias = "d"
+depends = ["dev:css", "dev:django"]
+
+# ---------- database ----------
+
+[tasks."db:makemigrations"]
+description = "Create migrations"
+alias = "mm"
+interactive = true
+raw_args = true
+run = "uv run python {{vars.manage}} makemigrations"
+
+[tasks."db:migrate"]
+description = "Apply migrations"
+alias = "m"
+raw_args = true
+run = "uv run python {{vars.manage}} migrate"
+
+[tasks."db:show"]
+description = "Show migration status"
+run = "uv run python {{vars.manage}} showmigrations"
+
+# ---------- quality ----------
+
+[tasks."quality:lint"]
+description = "Ruff, ty, and djangofmt checks"
+alias = "lint"
+run = [
+  "uv run ruff check ./src",
+  "uv run ty check ./src",
+  "uv run djangofmt check ./src",
+]
+
+[tasks."quality:format"]
+description = "Format Python and templates"
+alias = "fmt"
+run = [
+  "uv run ruff format ./src",
+  "uv run djangofmt ./src",
+]
+
+[tasks."quality:fix"]
+description = "Auto-fix lint issues"
+alias = "fix"
+run = [
+  "uv run ruff check --fix ./src",
+  "uv run djangofmt check --fix ./src",
+]
+
+[tasks."quality:test"]
+description = "Run accounts tests"
+alias = "test"
+run = "uv run python {{vars.manage}} test accounts.tests"
+
+# ---------- shell / debug ----------
+
+[tasks.shell]
+description = "Django shell"
+interactive = true
+run = "uv run python {{vars.manage}} shell"
+
+[tasks.doctor]
+description = "Print tool versions"
+quiet = true
+run = [
+  "uv --version",
+  "bun --version",
+  "uv run python --version",
+]
+
+[tasks.debug]
+description = "Run server under debugpy on port 5678"
+interactive = true
+run = "uv run python -m debugpy --listen 5678 --wait-for-client {{vars.manage}} runserver {{vars.host}}:{{vars.port}} --noreload"
