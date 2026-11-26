@@ -4,6 +4,7 @@ from urllib.parse import parse_qs, urlsplit
 from django.contrib.auth.models import AnonymousUser, Group
 from django.http import HttpRequest, HttpResponse
 from django.test import RequestFactory, TestCase
+from django.urls import reverse
 from django_htmx.middleware import HtmxDetails
 
 from accounts.models import User
@@ -122,6 +123,22 @@ class RoleRequiredTests(TestCase):
 
         return request
 
+    def create_htmx_request(self, user, current_url=None) -> HtmxRequest:
+        headers: dict[str, str] = {"HX-Request": "true"}
+
+        if current_url is not None:
+            headers["HX-Current-URL"] = current_url
+
+        request = cast(
+            HtmxRequest,
+            self.factory.get("/protected/?source=table", headers=headers),
+        )
+
+        request.user = user
+        request.htmx = HtmxDetails(request)
+
+        return request
+
     def test_user_with_required_role_can_access_view(self):
         request = self.create_request(self.admin)
 
@@ -151,3 +168,46 @@ class RoleRequiredTests(TestCase):
     def test_invalid_role_raises_value_error(self):
         with self.assertRaises(ValueError):
             role_required("InvalidRole")
+
+    def test_unauthorized_htmx_request_redirects_to_403(self):
+        request = self.create_htmx_request(self.editor)
+
+        response = admin_only_view(request)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            response["HX-Redirect"],
+            reverse("four_zero_three"),
+        )
+
+    def test_anonymous_htmx_request_redirects_to_login(self):
+        current_url = "http://testserver/dashboard/?tab=roles"
+
+        request = self.create_htmx_request(
+            AnonymousUser(),
+            current_url=current_url,
+        )
+
+        response = admin_only_view(request)
+
+        self.assertEqual(response.status_code, 200)
+
+        redirect_url = response["HX-Redirect"]
+        query = parse_qs(urlsplit(redirect_url).query)
+
+        self.assertEqual(query["next"], [current_url])
+
+    def test_anonymous_htmx_request_uses_current_path_as_fallback(self):
+        request = self.create_htmx_request(AnonymousUser())
+
+        response = admin_only_view(request)
+
+        self.assertEqual(response.status_code, 200)
+
+        redirect_url = response["HX-Redirect"]
+        query = parse_qs(urlsplit(redirect_url).query)
+
+        self.assertEqual(
+            query["next"],
+            [request.get_full_path()],
+        )
