@@ -944,6 +944,12 @@
   .um\:mt-3 {
     margin-top: calc(var(--um-spacing) * 3);
   }
+  .um\:mb-2 {
+    margin-bottom: calc(var(--um-spacing) * 2);
+  }
+  .um\:mb-3 {
+    margin-bottom: calc(var(--um-spacing) * 3);
+  }
   @layer daisyui.l1.l2.l3 {
     .um\:ums-navbar-end {
       display: inline-flex;
@@ -998,6 +1004,9 @@
       }
     }
   }
+  .um\:flex {
+    display: flex;
+  }
   .um\:hidden {
     display: none;
   }
@@ -1009,6 +1018,18 @@
   }
   .um\:h-\[1em\] {
     height: 1em;
+  }
+  .um\:h-dvh {
+    height: 100dvh;
+  }
+  .um\:min-h-dvh {
+    min-height: 100dvh;
+  }
+  .um\:min-h-full {
+    min-height: 100%;
+  }
+  .um\:min-h-screen {
+    min-height: 100vh;
   }
   .um\:w-5 {
     width: calc(var(--um-spacing) * 5);
@@ -1022,8 +1043,23 @@
   .um\:w-full {
     width: 100%;
   }
+  .um\:flex-1 {
+    flex: 1;
+  }
   .um\:shrink-0 {
     flex-shrink: 0;
+  }
+  .um\:flex-col {
+    flex-direction: column;
+  }
+  .um\:flex-row {
+    flex-direction: row;
+  }
+  .um\:items-center {
+    align-items: center;
+  }
+  .um\:justify-center {
+    justify-content: center;
   }
   .um\:overflow-x-auto {
     overflow-x: auto;
@@ -1091,6 +1127,9 @@
   .um\:p-2 {
     padding: calc(var(--um-spacing) * 2);
   }
+  .um\:text-center {
+    text-align: center;
+  }
   .um\:text-xl {
     font-size: var(--um-text-xl);
     line-height: var(--tw-leading, var(--um-text-xl--line-height));
@@ -1104,6 +1143,9 @@
   }
   .um\:text-base-content {
     color: var(--color-base-content);
+  }
+  .um\:text-primary {
+    color: var(--color-primary);
   }
   .um\:no-underline {
     text-decoration-line: none;

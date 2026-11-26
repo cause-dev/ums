@@ -4,7 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.forms import modelform_factory
 from django.shortcuts import render
 from django.views import View
-from django.views.generic import DetailView, ListView
+from django.views.generic import DetailView, ListView, TemplateView
 from django.views.generic.detail import SingleObjectMixin
 
 from accounts.mixins import get_field_name
@@ -168,3 +168,13 @@ class UserListView(LoginRequiredMixin, ListView):
         user = self.request.user
         data = get_user_list(qs, user)
         return data
+
+
+class PermissionDeniedView(TemplateView):
+    """Default 403 permission denied page."""
+
+    template_name = "account/403.html"
+
+    def render_to_response(self, context, **response_kwargs):
+        response_kwargs["status"] = 403
+        return super().render_to_response(context, **response_kwargs)

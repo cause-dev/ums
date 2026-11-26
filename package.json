@@ -1,6 +1,6 @@
 {
 	"scripts": {
-		"css:dev": "bunx @tailwindcss/cli -i ./assets/input.css -o ./src/accounts/static/accounts/css/app.css --watch",
+		"css:dev": "bunx @tailwindcss/cli -i ./assets/input.css -o ./src/accounts/static/accounts/css/app.css --watch=always",
 		"css:build": "bunx @tailwindcss/cli -i ./assets/input.css -o ./src/accounts/static/accounts/css/app.css --minify"
 	},
 	"dependencies": {},

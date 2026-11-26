@@ -10,7 +10,7 @@
         {% htmx_script %}
         <title>{% block title %} {{ section.title }} {% endblock %}</title>
     </head>
-    <body hx-headers='{"x-csrftoken": "{{ csrf_token }}"}' class="um:bg-base-200">
+    <body hx-headers='{"x-csrftoken": "{{ csrf_token }}"}' class="um:bg-base-200 um:flex um:flex-col um:min-h-dvh">
         {% include "components/header.html" %}
 
         {% block message %}
